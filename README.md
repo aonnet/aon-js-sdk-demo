@@ -1,6 +1,6 @@
 # AONWEB
 
-aonweb - JavaScript sdk for AON
+aonweb - JavaScript sdk for AON, **"Only supports version 1.x, does not support version 2.x and later. For version 2.x, please refer to the update_aonweb branch.**
 
 - API version: 1.0.0
 - Package version: 1.0.14
