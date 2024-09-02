@@ -150,6 +150,6 @@ prediction_async();
 ### Constructor
 
 name | type | Description | default
------------- | ------------- | -------------
+------------ | ------------- | ------------- | -------------
 *app_key* | string | **Required**. |
 *is_async* | bool |  **Options**. | false
