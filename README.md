@@ -3,7 +3,7 @@
 aonweb - JavaScript sdk for AON
 
 - API version: 1.0.0
-- Package version: 1.0.14
+- Package version: 2.0.2
 
 ## Installation
 
@@ -14,7 +14,7 @@ aonweb - JavaScript sdk for AON
 Install it from npm:
 
 ```shell
-npm install aonweb --save
+npm install aonweb --save or npm install aonweb@2.0.2 --save
 ```
 
 ## Getting Started
@@ -23,54 +23,38 @@ Please follow the [installation](#installation) instruction and execute the foll
 
 ```javascript
 
-import { AI, AIOptions, User } from 'aonweb'
+import { AI, User } from 'aonweb'
 
-function sleep(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function prediction() {
+const prediction = async () => {
+  try {
     let user = new User()
-    let is_login = await user.islogin()
-    if (!is_login) {
-        for (let i = 0; i < 10; i++) {
-            let result = await user.getOwnedUsers()
-            let userid = result && result._userIds && result._userIds.length && result._userIds[0]
-            if (userid && userid.length) {
-                break
-            }
-            await sleep(300)       
-        }
-        is_login = await user.islogin()
-        if (!is_login) {
-            showToast("login failed,please try again later");
+    let login_user = await user.islogin()
+    if (!login_user) {
+        login_user = await user.login()
+        if (!login_user) {
+            console.log("login failed,please try again later");
             return
         }
     }
-    const ai_options = new AIOptions({
-        appId: REPLACE_APP_ID //replace app id
+    const ai = new AI({
+      app_key: REPLACE_APP_KEY //replace app key
     })
-    let price = 10
-	const ai = new AI(ai_options)
-    let response = await ai.prediction("/predictions/ai/stable-diffusion-3",
-    {
-        input:{
-            "prompt": "with smoke, half ice and half fire and ultra realistic in detail.wolf, typography, dark fantasy, wildlife photography, vibrant, cinematic and on a black background",
-            "cfg": 3.5,
-            "steps": 28,
-            "aspect_ratio": "9:16",
-            "output_format": "png",
-            "output_quality": 90,
-            "negative_prompt": "",
-            "prompt_strength": 0.85
+    let data = {
+      "meta-llama-3-8b-instruct@iAON-internal":{
+          prompt: "with smoke, half ice and half fire and ultra realistic in detail.wolf, typography, dark fantasy, wildlife photography, vibrant, cinematic and on a black background",
+          max_new_tokens:512,
+          prompt_template: "{prompt}"
         }
-    },price);
+    }
+    let response = await ai.prediction(["meta-llama-3-8b-instruct@iAON-internal"],data);
+    let responseData = null
     if (response && response.code == 200 && response.data) {
-        response = response.data
+      responseData = response.data[0]
     }
-    if (response.task.exec_code == 200 && response.task.is_success) {
-        console.log("test",response.output);
-    }
+    console.log('responseData.result = ',responseData.result)
+  } catch (error) {
+    console.log("prediction error = ",error)
+  }
 }
 
 prediction();
@@ -81,4 +65,4 @@ prediction();
 
 name | type | Description
 ------------ | ------------- | -------------
-*appId* | string | **Required**.
+*app_key* | string | **Required**.

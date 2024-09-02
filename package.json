@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "aonweb": "^1.0.14",
+    "aonweb": "^2.0.2",
     "vue": "^3.4.31"
   },
   "devDependencies": {
