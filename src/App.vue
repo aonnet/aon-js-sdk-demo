@@ -22,7 +22,7 @@ const prediction_async = async () => {
 
   const options = {
     //Please replace with your own app_key.
-    app_key: "20098a6c-19af-47b8-8b65-9d74652e587c",
+    app_key: REPLACE_APP_KEY,
     is_async: true,
   }
   const aonet = new AI(options)
